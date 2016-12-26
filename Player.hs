@@ -1,5 +1,9 @@
  module Player (
-	Player(..)
+	Player(..),
+	playerColor,
+	playerControl,
+	playerPosition,
+	playerCards
 	) where
 
 import Position

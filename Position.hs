@@ -1,5 +1,7 @@
 module Position (
-	Position(..)
+	Position(..),
+	xPosition,
+	yPosition
 	) where
 
 import Numeric.Natural
