@@ -2,10 +2,12 @@ module Position (
 	Position(..)
 	) where
 
-data Position = Position Integer Integer
+import Numeric.Natural
 
-xPosition :: Position -> Integer
+data Position = Position Natural Natural
+
+xPosition :: Position -> Natural
 xPosition (Position x _) = x
 
-yPosition :: Position -> Integer
+yPosition :: Position -> Natural
 yPosition (Position _ y) = y

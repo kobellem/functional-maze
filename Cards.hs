@@ -2,4 +2,6 @@ module Cards (
 	Cards(..)
 	) where
 
-data Cards = Cards Integer
+import Numeric.Natural
+
+data Cards = Natural Cards
