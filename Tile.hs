@@ -3,21 +3,30 @@ module Tile (
 	Kind(..),
 	Direction(..),
 	Treasure(..),
-	drawTile
+	getSprite
 ) where
 
 import Numeric.Natural
-import System.IO
 
 data Kind = Corner | TShape | Line deriving (Show)
 data Direction = North | East | South | West deriving (Show)
-data Treasure = Treasure Natural
+data Treasure = Treasure Natural deriving (Show)
 
 data Tile = Tile Kind Treasure Direction
 
-drawTile :: Tile -> IO()
-drawTile (Tile kind treasure direction) = 
-	let path = "sprites/" ++ ((show kind) ++ (show direction)) ++ ".txt"
+getSprite :: Tile -> IO [[Char]]
+getSprite (Tile kind treasure direction) =
+	let s = readSprite $ "sprites/" ++ show kind ++ show direction ++ ".txt"
 	in do
-		contents <- readFile path
-		putStr contents
+		sprite <- s
+		return $ (\line -> replaceNth 2 line sprite) (replaceNth 2 ((show treasure) !! 1) (sprite !! 2)) 
+
+readSprite :: [Char] -> IO [[Char]]
+readSprite path = do
+	contents <- readFile path
+	return $ lines contents
+
+replaceNth :: Int -> a -> [a] -> [a] 
+replaceNth n newVal (x:xs)
+	| n == 0 = newVal:xs
+	| otherwise = x:replaceNth (n-1) newVal xs

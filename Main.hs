@@ -1,9 +1,10 @@
--- import Players
+--import Players
 import Tile
 
 main :: IO()
 main = do
-	drawTile $ Tile Line (Treasure 5) North
+	sprite <- getSprite $ Tile Line (Treasure 5) East
+	putStr $ unlines sprite
 
 startup :: IO()
 startup = do 
