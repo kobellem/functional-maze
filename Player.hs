@@ -1,15 +1,17 @@
  module Player (
 	Player(..),
+	Color(..),
+	Control(..),
 	playerColor,
 	playerControl,
 	playerPosition,
 	playerCards
-	) where
+) where
 
 import Position
 import Cards
 
-data Color = Yellow | Red | Blue | Green
+data Color = Yellow | Red | Blue | Green deriving (Enum)
 data Control = Human | AI
 
 data Player = Player Color Control Position Cards
@@ -25,3 +27,17 @@ playerPosition (Player _ _ pos _) = pos
 
 playerCards :: Player -> Cards
 playerCards (Player _ _ _ cards) = cards
+
+-- Show instance declarations
+instance Show Color where
+	show Yellow = "Yellow"
+	show Red = "Red"
+	show Blue = "Blue"
+	show Green = "Green"
+
+instance Show Control where
+	show Human = "Human"
+	show AI = "AI"
+
+instance Show Player where
+	show player = (show (playerControl player)) ++ " Player " ++ (show (playerColor player))

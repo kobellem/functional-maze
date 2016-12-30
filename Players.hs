@@ -1,5 +1,7 @@
 module Players (
-  Players(..)
+  Players(..),
+	getCurrentPlayer,
+	next
 ) where
 
 import Player
@@ -7,5 +9,8 @@ import Player
 data Players = Players [Player]
 
 -- current turn = first Player of the list
+getCurrentPlayer :: Players -> Player
+getCurrentPlayer (Players lst) = head lst
+
 next :: Players -> Players
 next (Players (x:xs)) = Players $ xs ++ [x]
