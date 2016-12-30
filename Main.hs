@@ -18,7 +18,7 @@ main = do
 	let nTotal = nHumans + nAIs
 	if nTotal < 2 || nTotal > 4
 	then putStr "Please decalare 2 to 4 players"
-	else putStr $ show $ getCurrentPlayer $ next $ makePlayers (read (args !! 0) :: Int) (read (args !! 1) :: Int)
+	else putStr $ show $ getCurrentPlayer $ next $ makePlayers nHumans nAIs
 
 makePlayers :: Int -> Int -> Players
 makePlayers nh na = Players $ map makePlayer $ (replicate nh "human") ++ (replicate na "ai")
