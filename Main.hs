@@ -1,3 +1,4 @@
+import Board
 import Cards
 --import Labyrinth
 import Player
@@ -6,6 +7,7 @@ import Position
 import Tile
 --import XTile
 
+import Numeric.Natural
 import System.Environment
 
 main :: IO()
@@ -18,7 +20,8 @@ main = do
 	let nTotal = nHumans + nAIs
 	if nTotal < 2 || nTotal > 4
 	then putStr "Please decalare 2 to 4 players"
-	else putStr $ show $ getCurrentPlayer $ next $ makePlayers nHumans nAIs
+	else putStr $ (show $ getCurrentPlayer $ next $ makePlayers nHumans nAIs) ++ "\n"
+	drawBoard $ Board [[(Tile Line (Treasure 1) East),(Tile TShape (Treasure 2) South)],[(Tile Corner (Treasure 3) South),(Tile Corner (Treasure 4) West)]]
 
 makePlayers :: Int -> Int -> Players
 makePlayers nh na = Players $ map makePlayer $ (replicate nh "human") ++ (replicate na "ai")
