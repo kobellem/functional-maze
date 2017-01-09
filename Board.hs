@@ -7,7 +7,7 @@ import Tile
 
 import Data.List
 
-data Board = Board [[Tile]]
+data Board = Board [[Tile]] deriving (Show)
 
 drawBoard :: Board -> IO()
 drawBoard (Board tiles) =

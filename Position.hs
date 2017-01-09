@@ -6,7 +6,7 @@ module Position (
 
 import Numeric.Natural
 
-data Position = Position Natural Natural
+data Position = Position Natural Natural deriving (Show)
 
 xPosition :: Position -> Natural
 xPosition (Position x _) = x

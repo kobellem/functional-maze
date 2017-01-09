@@ -1,36 +1,37 @@
 module Tile (
 	Tile(..),
-	Tiles(..),
 	Kind(..),
 	Direction(..),
 	Treasure(..),
-	getSprite
+	getSprite,
 ) where
 
+import Control.Monad
 import Numeric.Natural
-import qualified Parser
+import Text.Read
 
-data Kind = Corner | TShape | Line deriving (Eq, Show)
-data Direction = North | East | South | West deriving (Eq, Show)
-data Treasure = Treasure Natural deriving (Show)
+data Kind = Corner | TShape | Line deriving (Eq, Show, Read)
+data Direction = North | East | South | West deriving (Eq, Show, Read)
+data Treasure = Treasure Natural deriving (Eq, Show, Read)
 
-data Tile = Tile Kind Treasure Direction
-data Tiles = Tiles [Tile]
+data Tile = Tile Kind Treasure Direction deriving (Eq, Show, Read)
+
+-- getters
+getKind :: Tile -> Kind
+getKind (Tile k _ _) = k
 
 getTreasure :: Tile -> Treasure
 getTreasure (Tile _ t _) = t
+
+getDirection :: Tile -> Direction
+getDirection (Tile _ _ d) = d
 
 getSprite :: Tile -> [[Char]]
 getSprite tile =
 		let sprite = readSprite tile
 		in (\line -> replaceNth 1 line sprite) (replaceNth 1 ((show (getTreasure tile)) !! 1) (sprite !! 1))
 
---deprecated, causes IO problems in further computations
---readSprite :: [Char] -> IO [[Char]]
---readSprite path = do
---	contents <- readFile path
---	return $ lines contents
-
+-- create the sprite
 readSprite :: Tile -> [[Char]]
 readSprite (Tile kind _ dir)
 	| kind == Line && dir == North =
@@ -74,6 +75,7 @@ readSprite (Tile kind _ dir)
 		 "  X",
 		 "XXX"]
 
+-- help functions
 replaceNth :: Int -> a -> [a] -> [a] 
 replaceNth n newVal (x:xs)
 	| n == 0 = newVal:xs

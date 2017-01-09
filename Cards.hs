@@ -4,4 +4,4 @@ module Cards (
 
 import Numeric.Natural
 
-data Cards = Natural Cards
+data Cards = Cards Natural deriving (Show)

@@ -1,11 +1,13 @@
 import Board
 import Cards
 --import Labyrinth
-import Player
+--import Player
 import Players
 import Position
 import Tile
---import XTile
+--import Tiles
+import GameState
+
 
 import Numeric.Natural
 import System.Environment
@@ -18,15 +20,9 @@ main = do
 	let nHumans = read (args !! 0) :: Int
 	let nAIs = read (args !! 1) :: Int
 	let nTotal = nHumans + nAIs
+	putStr "starting game ..."
 	if nTotal < 2 || nTotal > 4
 	then putStr "Please decalare 2 to 4 players"
-	else putStr $ (show $ getCurrentPlayer $ next $ makePlayers nHumans nAIs) ++ "\n"
-	drawBoard $ Board [[(Tile Line (Treasure 1) East),(Tile TShape (Treasure 2) South)],[(Tile Corner (Treasure 3) South),(Tile Corner (Treasure 4) West)]]
-
-makePlayers :: Int -> Int -> Players
-makePlayers nh na = Players $ map makePlayer $ (replicate nh "human") ++ (replicate na "ai")
-
-makePlayer :: [Char] -> Player
-makePlayer kind
-	| kind == "human" = Player Red Human (Position 0 0) (Cards 0)
-	| kind == "ai"		= Player Red AI (Position 0 0) (Cards 0)
+	else do
+		game <- (newGame "./new.txt" nHumans nAIs)
+		putStr $ show game 

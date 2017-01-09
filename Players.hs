@@ -6,7 +6,7 @@ module Players (
 
 import Player
 
-data Players = Players [Player]
+data Players = Players [Player] deriving (Show)
 
 -- current turn = first Player of the list
 getCurrentPlayer :: Players -> Player

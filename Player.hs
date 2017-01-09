@@ -11,7 +11,7 @@
 import Position
 import Cards
 
-data Color = Yellow | Red | Blue | Green deriving (Enum)
+data Color = Yellow | Red | Blue | Green
 data Control = Human | AI
 
 data Player = Player Color Control Position Cards
