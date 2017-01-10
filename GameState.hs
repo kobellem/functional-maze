@@ -1,7 +1,8 @@
 module GameState (
-	--GameState(..)
 	Game(..),
-	newGame
+	getPlayers,
+	newGame,
+	draw
 	) where
 
 import Board
@@ -14,17 +15,18 @@ import Tile
 
 import qualified Deserializer
 
--- import qualified Data.Random
 import Control.Monad.Trans.State.Lazy
 import Data.Tuple
 
 data Game = Game Board [Tile] Players deriving (Show)
 
+getPlayers :: Game -> Players
+getPlayers (Game _ _ players) = players
+
 newGame :: [Char] -> Int -> Int -> IO Game
 newGame path humans ais =
 	readFile path >>=
-	-- TODO create players properly
-		\toParse ->	return $ (\nb -> (Game (fst nb) (snd nb) (makePlayers humans ais))) (newBoard toParse)
+		\toParse ->	return $ (\(board, tiles) -> (Game board tiles (makePlayers humans ais))) (newBoard toParse)
 
 newBoard :: [Char] -> (Board, [Tile])
 newBoard s =
@@ -39,13 +41,17 @@ createBoardTiles :: Int -> [Tile] -> ([Tile], [Tile])
 createBoardTiles n tiles = ((take n tiles),(drop n tiles))
 
 makePlayers :: Int -> Int -> Players
-makePlayers nh na = Players $ map makePlayer $ (replicate nh "human") ++ (replicate na "ai")
+makePlayers nh na = 
+	let players = map makePlayer $ (replicate nh "human") ++ (replicate na "ai")
+	in Players $ zipWith (\ (Player _ control pos cards) color -> Player color control pos cards) players [Yellow, Red, Blue, Green] 
 
-makePlayer :: [Char] -> Player
+makePlayer :: [Char]  -> Player
 makePlayer kind
-	-- TODO give different colors + add cards
 	| kind == "human" = Player Red Human (Position 0 0) (Cards 0)
 	| kind == "ai"		= Player Red AI (Position 0 0) (Cards 0)
+
+draw :: Game -> IO()
+draw (Game b _ _) = drawBoard b
 
 splitAtEachN :: Int -> [a] -> [[a]]
 splitAtEachN n lst =
