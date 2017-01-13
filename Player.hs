@@ -2,42 +2,70 @@
 	Player(..),
 	Color(..),
 	Control(..),
-	playerColor,
-	playerControl,
-	playerPosition,
-	playerCards
+	getColor,
+	getControl,
+	getPosition,
+	getCards,
+	move
 ) where
 
+import Board
 import Position
 import Cards
+import Tile
 
-data Color = Yellow | Red | Blue | Green
-data Control = Human | AI
+data Color = Yellow | Red | Blue | Green deriving (Show)
+data Control = Human | AI deriving (Show)
 
-data Player = Player Color Control Position Cards
+data Player = Player Color Control Position Cards deriving (Show)
 
-playerColor :: Player -> Color
-playerColor (Player color _ _ _) = color
+getColor :: Player -> Color
+getColor (Player color _ _ _) = color
 
-playerControl :: Player -> Control
-playerControl (Player _ control _ _) = control
+getControl :: Player -> Control
+getControl (Player _ control _ _) = control
 
-playerPosition :: Player -> Position
-playerPosition (Player _ _ pos _) = pos
+getPosition :: Player -> Position
+getPosition (Player _ _ pos _) = pos
 
-playerCards :: Player -> Cards
-playerCards (Player _ _ _ cards) = cards
+getCards :: Player -> Cards
+getCards (Player _ _ _ cards) = cards
 
--- Show instance declarations
-instance Show Color where
-	show Yellow = "Yellow"
-	show Red = "Red"
-	show Blue = "Blue"
-	show Green = "Green"
-
-instance Show Control where
-	show Human = "Human"
-	show AI = "AI"
-
-instance Show Player where
-	show player = (show (playerControl player)) ++ " Player " ++ (show (playerColor player))
+move :: [Char] -> Board -> Player -> Maybe Player
+move dir (Board tiles) (Player col cont pos cards)
+	| dir == "left" =
+		let newX = (xPosition pos) - 1
+		in
+			if newX < 0
+			then Nothing
+			else 
+				if (hasConnection dir (tiles !! (yPosition pos) !! (xPosition pos))) && (hasConnection "right" (tiles !! (yPosition pos) !! newX))
+				then Just $ Player col cont (Position newX $ yPosition pos) cards
+				else Nothing
+	| dir == "right" =
+		let newX = (xPosition (pos)) + 1
+		in
+			if newX > 6
+			then Nothing
+			else 
+				if (hasConnection dir (tiles !! (yPosition pos) !! (xPosition pos))) && (hasConnection "left" (tiles !! (yPosition pos) !! newX))
+				then Just $ Player col cont (Position newX $ yPosition pos) cards
+				else Nothing
+	| dir == "up" =
+		let newY = (yPosition (pos)) - 1
+		in
+			if newY < 0
+			then Nothing
+			else 
+				if (hasConnection dir (tiles !! (yPosition pos) !! (xPosition pos))) && (hasConnection "down" (tiles !! newY !! (xPosition pos)))
+				then Just $ Player col cont (Position (xPosition pos) newY) cards
+				else Nothing
+	| dir == "down" =
+		let newY = (yPosition (pos)) + 1
+		in
+			if newY > 6
+			then Nothing
+			else 
+				if (hasConnection dir (tiles !! (yPosition pos) !! (xPosition pos))) && (hasConnection "up" (tiles !! newY !! (xPosition pos)))
+				then Just $ Player col cont (Position (xPosition pos) newY) cards
+				else Nothing

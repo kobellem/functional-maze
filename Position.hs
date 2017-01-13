@@ -1,15 +1,15 @@
 module Position (
 	Position(..),
 	xPosition,
-	yPosition
+	yPosition,
 	) where
 
 import Numeric.Natural
 
-data Position = Position Natural Natural deriving (Show)
+data Position = Position Int Int deriving (Show)
 
-xPosition :: Position -> Natural
+xPosition :: Position -> Int
 xPosition (Position x _) = x
 
-yPosition :: Position -> Natural
+yPosition :: Position -> Int
 yPosition (Position _ y) = y
